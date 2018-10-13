@@ -46,8 +46,16 @@ public class Challenge {
 	}
 	
 	public void setReceived() {
-		this.created = System.currentTimeMillis();
-		this.id = UUID.randomUUID().toString();
+		setCreated(System.currentTimeMillis());
+		setId(UUID.randomUUID().toString());
+	}
+	
+	public void setCreated(Long created) {
+		this.created = created;
+	}
+	
+	public void setId(String id) {
+		this.id = id;
 	}
 	
 	public Item toItem() {

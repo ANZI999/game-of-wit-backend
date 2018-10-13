@@ -2,6 +2,8 @@ package com.myproduction.gameofwit.model;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapperFieldModel.DynamoDBAttributeType;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTyped;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @DynamoDBDocument
@@ -20,8 +22,8 @@ public class ChallengePart {
 		
 	}
 
-	@DynamoDBAttribute(attributeName = "isFillable")
-	public boolean isFillable() {
+	@DynamoDBTyped(DynamoDBAttributeType.BOOL)
+	public boolean getIsFillable() {
 		return isFillable;
 	}
 
@@ -35,7 +37,7 @@ public class ChallengePart {
 		return allowedLength;
 	}
 
-	public void setFillable(boolean isFillable) {
+	public void setIsFillable(boolean isFillable) {
 		this.isFillable = isFillable;
 	}
 
