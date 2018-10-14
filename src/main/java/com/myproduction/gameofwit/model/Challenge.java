@@ -1,6 +1,7 @@
 package com.myproduction.gameofwit.model;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -47,36 +48,52 @@ public class Challenge {
 	public Long getId() {
 		return id;
 	}
-	
-    public Date getCreated() { 
-		return created; 
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Date getCreated() {
+		return created;
+	}
+
+	public void setCreated(Date created) {
+		this.created = created;
+	}
+
+	public List<ChallengePart> getParts() {
+		return parts;
+	}
+
+	public void setParts(List<ChallengePart> parts) {
+		this.parts = parts;
 	}
 	
-    @JsonIgnore 
+	@JsonIgnore 
     public ChallengeStructure getStructure() { 
 		return new ChallengeStructure(id, parts); 
-	}
-    
-    public Long getUserId() { 
-		return userId; 
 	}
 	
 	public void setStructure(ChallengeStructure structure) {
 		this.parts = structure.getParts();
 	}
-	
-	public void setCreated(Date created) {
-		this.created = created;
-	}
-	
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	public void setUserId(Long userId) { 
-		this.userId = userId; 
-	}
-	
+
 	@PrePersist
 	protected void onCreate() {
 		created = new Date();
@@ -95,5 +112,25 @@ public class Challenge {
 		}
 		answer.append("]");
 		return answer.toString();
+	}
+
+	public boolean isValid(Submission submission) {
+		Iterator<String> spIterator = submission.getParts().iterator();
+		Iterator<ChallengePart> cpIterator = parts.iterator();
+		
+		while(cpIterator.hasNext()) {
+			ChallengePart challengePart = cpIterator.next();
+			if(challengePart.getIsFillable() && 
+					(!spIterator.hasNext() || 
+							!challengePart.isMatch(spIterator.next()))) {
+				return false;
+			}
+		}
+		
+		if(spIterator.hasNext()) {
+			return false;
+		}
+		
+		return true;
 	}
 }

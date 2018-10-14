@@ -11,6 +11,13 @@ CREATE TABLE data.challenge (
     created     TIMESTAMP
 );
 
+CREATE TABLE data.submission (
+    id        		BIGSERIAL PRIMARY KEY,
+    user_id     	BIGINT NOT NULL,
+	challenge_id 	BIGINT NOT NULL,
+    created     	TIMESTAMP
+);
+
 GRANT USAGE ON SCHEMA data TO application_account;
 GRANT SELECT, UPDATE, INSERT, DELETE ON ALL TABLES IN SCHEMA data TO application_account;
 GRANT SELECT, UPDATE, USAGE ON ALL SEQUENCES IN SCHEMA data TO application_account;

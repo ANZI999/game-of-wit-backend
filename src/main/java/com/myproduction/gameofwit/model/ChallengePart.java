@@ -53,5 +53,9 @@ public class ChallengePart {
 	public String toString() {
 		return "[ " + (isFillable ? allowedLength : text) + " ]";
 	}
+
+	public boolean isMatch(String next) {
+		return next.length() <= allowedLength;
+	}
 	
 }
