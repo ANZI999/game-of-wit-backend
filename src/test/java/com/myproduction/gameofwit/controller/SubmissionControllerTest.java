@@ -1,11 +1,13 @@
 package com.myproduction.gameofwit.controller;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
@@ -53,7 +55,9 @@ public class SubmissionControllerTest {
 		
 		mockMvc.perform(post("/submission/create")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(generateValidSubmission())).andExpect(status().isOk());
+				.content(generateValidSubmission()))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("data", is("success")));
 		
 		ArgumentCaptor<Submission> submissionCaptor = ArgumentCaptor.forClass(Submission.class);
 		verify(submissionService, times(1)).save(submissionCaptor.capture());
@@ -69,8 +73,10 @@ public class SubmissionControllerTest {
 		
 		mockMvc.perform(post("/submission/create")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(generateInvalidSubmission())).andExpect(status().isOk());
-		
+				.content(generateInvalidSubmission()))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("data", is("invalid submission")));
+			
 		verify(submissionService, never()).save(Mockito.any(Submission.class));	
 	}
 	

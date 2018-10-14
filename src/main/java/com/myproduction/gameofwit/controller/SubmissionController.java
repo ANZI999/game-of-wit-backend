@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.myproduction.gameofwit.Response;
 import com.myproduction.gameofwit.model.Challenge;
 import com.myproduction.gameofwit.model.Submission;
 import com.myproduction.gameofwit.repository.ChallengeService;
@@ -22,13 +23,17 @@ public class SubmissionController {
 	SubmissionService submissionService;
 	
 	@RequestMapping(value="/create", method = RequestMethod.POST)
-	public String create(@RequestBody Submission submission) {
+	public Response create(@RequestBody Submission submission) {
 		Challenge challenge = challengeService.findById(submission.getChallengeId(), true);
 		
+		Response response = new Response();
 		if(challenge.isValid(submission)) {
 			submissionService.save(submission);
+			response.setData("success");
+		} else {
+			response.setData("invalid submission");
 		}
 		
-		return "okay";
+		return response;
 	}
 }
