@@ -27,5 +27,7 @@ targetCompatibility = 1.8
 
 dependencies {
 	compile("com.amazonaws:aws-java-sdk-dynamodb:1.11.428")
+	compile("org.springframework.boot:spring-boot-starter-data-jpa")
+	compile("org.postgresql:postgresql")
     compile("org.springframework.boot:spring-boot-starter-web")
 }

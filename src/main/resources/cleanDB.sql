@@ -1,0 +1,7 @@
+BEGIN;
+
+DROP SEQUENCE IF EXISTS hibernate_sequence;
+DROP SCHEMA IF EXISTS data CASCADE;
+DROP USER IF EXISTS application_account;
+
+COMMIT;

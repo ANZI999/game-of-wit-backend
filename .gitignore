@@ -5,3 +5,5 @@ build/
 .gradle/
 .project
 .settings/
+
+application.properties
