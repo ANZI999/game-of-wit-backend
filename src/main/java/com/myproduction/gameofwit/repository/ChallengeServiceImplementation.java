@@ -7,27 +7,17 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.myproduction.gameofwit.AWS;
 import com.myproduction.gameofwit.model.Challenge;
-import com.myproduction.gameofwit.model.ChallengeStructure;
 
 @Component
 public class ChallengeServiceImplementation implements ChallengeService {
-	
-	@Autowired
-	private AWS aws;
 	
 	@Autowired
 	private ChallengeRepository crudRepository;
 	
 	@Override
 	public Challenge findById(Long id, boolean hasStructure) {
-		Challenge challenge = crudRepository.findById(id).orElse(null);
-		if(hasStructure && challenge != null) {
-			challenge.setStructure(
-					aws.getDynamoDBMapper().load(ChallengeStructure.class, id));
-		}		
-		return challenge;
+		return crudRepository.findById(id).orElse(null);
 	}
 
 	@Override
@@ -43,7 +33,6 @@ public class ChallengeServiceImplementation implements ChallengeService {
 	@Override
 	public void save(Challenge challenge) {
 		crudRepository.save(challenge);
-		aws.getDynamoDBMapper().save(challenge.getStructure());
 	}
 
 }

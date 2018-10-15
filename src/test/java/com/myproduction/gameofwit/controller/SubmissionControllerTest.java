@@ -28,7 +28,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.myproduction.gameofwit.model.Challenge;
-import com.myproduction.gameofwit.model.ChallengePart;
+import com.myproduction.gameofwit.model.ChallengeElement;
 import com.myproduction.gameofwit.model.Submission;
 import com.myproduction.gameofwit.repository.ChallengeService;
 import com.myproduction.gameofwit.repository.SubmissionService;
@@ -84,7 +84,7 @@ public class SubmissionControllerTest {
 		return new JSONObject()
 				.put("userId", USER_ID)
 				.put("challengeId", CHALLENGE_ID)
-				.put("parts", new JSONArray().put("12345"))
+				.put("structure", new JSONArray().put("12345"))
 				.toString();
 	}
 	
@@ -92,7 +92,7 @@ public class SubmissionControllerTest {
 		return new JSONObject()
 				.put("userId", USER_ID)
 				.put("challengeId", CHALLENGE_ID)
-				.put("parts", new JSONArray().put("123456"))
+				.put("structure", new JSONArray().put("123456"))
 				.toString();
 	}
 	
@@ -100,18 +100,18 @@ public class SubmissionControllerTest {
 		Challenge challenge = new Challenge();
 		challenge.setId(CHALLENGE_ID);
 
-		List<ChallengePart> parts = new ArrayList<ChallengePart>();
+		List<ChallengeElement> structure = new ArrayList<ChallengeElement>();
 		
-		ChallengePart challengePartConst = new ChallengePart();
-		challengePartConst.setIsFillable(false);
-		challengePartConst.setText("bla bla bla");
-		parts.add(challengePartConst);
+		ChallengeElement challengeElementConst = new ChallengeElement();
+		challengeElementConst.setIsFillable(false);
+		challengeElementConst.setText("bla bla bla");
+		structure.add(challengeElementConst);
 		
-		ChallengePart challengePartEmpty = new ChallengePart();
-		challengePartConst.setIsFillable(true);
-		challengePartConst.setAllowedLength(5);
-		parts.add(challengePartEmpty);
-		challenge.setParts(parts);
+		ChallengeElement challengeElementEmpty = new ChallengeElement();
+		challengeElementEmpty.setIsFillable(true);
+		challengeElementEmpty.setAllowedLength(5);
+		structure.add(challengeElementEmpty);
+		challenge.setStructure(structure);
 		
 		return Mockito.spy(challenge);
 	}

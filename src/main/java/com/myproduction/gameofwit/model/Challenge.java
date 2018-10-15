@@ -9,9 +9,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+
+import org.springframework.util.SerializationUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -37,9 +39,9 @@ public class Challenge {
 	@JsonProperty("created")
 	private Date created;
 
-	@Transient
-	@JsonProperty("parts")
-	private List<ChallengePart> parts;
+	@Column(name = "structure")
+	@JsonProperty("structure")
+	private byte[] structureAsBytes;
 	
 	public Challenge() {
 		
@@ -76,22 +78,18 @@ public class Challenge {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-
-	public List<ChallengePart> getParts() {
-		return parts;
-	}
-
-	public void setParts(List<ChallengePart> parts) {
-		this.parts = parts;
-	}
 	
-	@JsonIgnore 
-    public ChallengeStructure getStructure() { 
-		return new ChallengeStructure(id, parts); 
+	@JsonIgnore
+	public byte[] getStructureAsBytes() {
+		return structureAsBytes;
 	}
-	
-	public void setStructure(ChallengeStructure structure) {
-		this.parts = structure.getParts();
+
+	public List<ChallengeElement> getStructure() {
+		return (List<ChallengeElement>) SerializationUtils.deserialize(structureAsBytes);
+	}
+
+	public void setStructure(List<ChallengeElement> structure) {
+		this.structureAsBytes = SerializationUtils.serialize(structure);
 	}
 
 	@PrePersist
@@ -99,27 +97,12 @@ public class Challenge {
 		created = new Date();
 	}
 
-	@Override
-	public String toString() {
-		StringBuilder answer = new StringBuilder();
-		answer.append(userId + ", " + name +"\n");
-		answer.append("[");
-		for(int i = 0; i < parts.size(); i++) {
-			if(i != 0) {
-				answer.append(", ");
-			}
-			answer.append(parts.get(i));
-		}
-		answer.append("]");
-		return answer.toString();
-	}
-
 	public boolean isValid(Submission submission) {
-		Iterator<String> spIterator = submission.getParts().iterator();
-		Iterator<ChallengePart> cpIterator = parts.iterator();
+		Iterator<String> spIterator = submission.getStructure().iterator();
+		Iterator<ChallengeElement> cpIterator = this.getStructure().iterator();
 		
 		while(cpIterator.hasNext()) {
-			ChallengePart challengePart = cpIterator.next();
+			ChallengeElement challengePart = cpIterator.next();
 			if(challengePart.getIsFillable() && 
 					(!spIterator.hasNext() || 
 							!challengePart.isMatch(spIterator.next()))) {

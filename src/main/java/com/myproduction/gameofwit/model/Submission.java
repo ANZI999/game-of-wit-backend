@@ -8,9 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.springframework.util.SerializationUtils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -36,9 +39,9 @@ public class Submission {
 	@JsonProperty("created")
 	private Date created;
 	
-	@Transient
-	@JsonProperty("parts")
-	private List<String> parts;
+	@Column(name = "structure")
+	@JsonProperty("structure")
+	private byte[] structureAsBytes;
 	
 	public Long getId() {
 		return id;
@@ -71,22 +74,18 @@ public class Submission {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
-
-	public List<String> getParts() {
-		return parts;
-	}
-
-	public void setParts(List<String> parts) {
-		this.parts = parts;
-	}
 	
-	@JsonIgnore 
-    public SubmissionStructure getStructure() { 
-		return new SubmissionStructure(id, parts); 
+	@JsonIgnore
+	public byte[] getStructureAsBytes() {
+		return structureAsBytes;
 	}
-	
-	public void setStructure(SubmissionStructure structure) {
-		this.parts = structure.getParts();
+
+	public List<String> getStructure() {
+		return (List<String>) SerializationUtils.deserialize(structureAsBytes);
+	}
+
+	public void setStructure(List<String> structure) {
+		this.structureAsBytes = SerializationUtils.serialize(structure);
 	}
 
 	@PrePersist
