@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Lob;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
@@ -95,6 +94,27 @@ public class Challenge {
 	@PrePersist
 	protected void onCreate() {
 		created = new Date();
+	}
+	
+	public void deduceName() {
+		String name = "";
+		Iterator<ChallengeElement> elements = this.getStructure().iterator();
+		boolean isFirst = true;
+		while(elements.hasNext()) {
+			ChallengeElement element = elements.next();
+			if(isFirst) {
+				isFirst = !isFirst;
+			} else {
+				name += " ";
+			}
+			if(element.getIsFillable()) {
+				name += "?";
+			} else {
+				name += element.getText();
+			}
+		}
+		
+		this.name = name;
 	}
 
 	public boolean isValid(Submission submission) {

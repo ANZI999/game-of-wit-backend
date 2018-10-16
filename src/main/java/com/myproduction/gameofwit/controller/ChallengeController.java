@@ -42,6 +42,7 @@ public class ChallengeController {
 	
 	@RequestMapping(value="/create", method = RequestMethod.POST)
 	public Response create(@RequestBody Challenge challenge) {
+		challenge.deduceName();
 		challengeService.save(challenge);
 
 		Response response = new Response();
