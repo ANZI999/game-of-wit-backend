@@ -1,7 +1,7 @@
 BEGIN;
 
-CREATE USER application WITH password 'password';
-CREATE USER flyway WITH password 'password';
+CREATE USER application WITH password 'xxx';
+CREATE USER flyway WITH password 'xxx';
 
 CREATE SCHEMA data;
 
