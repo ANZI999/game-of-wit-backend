@@ -1,6 +1,8 @@
 BEGIN;
 
 DROP SCHEMA IF EXISTS data CASCADE;
-DROP USER IF EXISTS application_account;
+DROP TABLE flyway_schema_history;
+DROP USER IF EXISTS application;
+DROP USER IF EXISTS flyway;
 
 COMMIT;

@@ -1,20 +1,20 @@
 BEGIN;
 
-CREATE USER application_account WITH password 'password';
+CREATE USER application WITH password 'password';
+CREATE USER flyway WITH password 'password';
 
 CREATE SCHEMA data;
 
-GRANT USAGE ON SCHEMA data TO application_account;
+GRANT USAGE ON SCHEMA data TO application;
+
+GRANT USAGE, CREATE ON SCHEMA data TO flyway;
+
 ALTER DEFAULT privileges IN SCHEMA data GRANT 
-	SELECT, 
-	UPDATE, 
-	INSERT, 
-	DELETE 
-ON TABLES TO application_account;
+	ALL
+ON TABLES TO flyway;
+
 ALTER DEFAULT privileges IN SCHEMA data GRANT 
-	SELECT, 
-	UPDATE, 
-	USAGE 
-ON SEQUENCES TO application_account;
+	ALL
+ON SEQUENCES TO flyway;
 
 COMMIT;

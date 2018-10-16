@@ -1,0 +1,12 @@
+ALTER DEFAULT privileges IN SCHEMA data GRANT 
+	SELECT, 
+	UPDATE, 
+	INSERT, 
+	DELETE 
+ON TABLES TO application;
+
+ALTER DEFAULT privileges IN SCHEMA data GRANT 
+	SELECT, 
+	UPDATE, 
+	USAGE 
+ON SEQUENCES TO application;
